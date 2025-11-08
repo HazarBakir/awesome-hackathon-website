@@ -16,7 +16,7 @@ body {
   overflow-x: hidden;
   min-width: 100vw;
   min-height: 100vh;
-  background: none;
+  background: linear-gradient(165.32deg, #17152d 38.13%, #532bdc 101.5%);
 }
 
 #root,
@@ -24,14 +24,14 @@ body {
   width: 100vw;
   height: 100dvh;
   min-width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .container {
   position: relative;
   display: grid;
   place-items: center;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr auto 1fr;
   grid-template-areas:
     "Header"
     "Content"
@@ -39,8 +39,6 @@ body {
   width: 100vw;
   height: 100dvh;
   min-height: 100dvh;
-  padding: 40px 20px;
-  background: linear-gradient(165.32deg, #17152d 38.13%, #532bdc 101.5%);
   overflow: hidden;
 }
 
@@ -50,7 +48,7 @@ body {
   z-index: 0;
   top: 0; left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background:
     linear-gradient(165.32deg, #17152d 38.13%, #532bdc 101.5%),
     radial-gradient(circle at 30% 50%, rgba(83,43,220,0.4) 0%, transparent 70%);
@@ -59,7 +57,6 @@ body {
   pointer-events: none;
 }
 
-/* Move .content into Content grid area instead of freely positioned */
 .content {
   position: relative;
   z-index: 1;
@@ -73,13 +70,12 @@ body {
   gap: 48px;
   padding: 0;
   grid-area: Content;
-  align-self: center;
 }
 
 .title {
   position: relative;
   font-weight: 700;
-  font-size: clamp(48px, 10vw, 180px);
+  font-size: clamp(40px, 8vw, 180px);
   line-height: 1.2;
   letter-spacing: -0.04em;
   margin-bottom: 0;
@@ -87,8 +83,6 @@ body {
   color: transparent;
   user-select: none;
   isolation: isolate;
-  /* Remove grid-area: Header; */
-  /* Remove align-self: center to let layout be handled by content's flex container if desired */
 }
 
 .title::before,
@@ -130,12 +124,11 @@ body {
 
 .description {
   font-weight: 700;
-  font-size: clamp(20px, 3vw, 48px);
+  font-size: clamp(18px, 3vw, 48px);
   line-height: 1.2;
   letter-spacing: -0.04em;
   margin-bottom: 0;
   animation: fadeInUp 1.2s ease-out;
-  /* Remove grid-area: Content; */
   align-self: center;
 }
 
@@ -235,6 +228,7 @@ body {
   box-shadow: 0 10px 30px rgba(83, 43, 220, 0.3);
   grid-area: Footer;
   align-self: center;
+  justify-self: center;
 }
 
 .explore-btn:hover {
@@ -248,7 +242,7 @@ body {
 
 .explore-text {
   font-weight: 700;
-  font-size: clamp(28px, 2.5vw, 40px);
+  font-size: clamp(22px, 2.5vw, 40px);
   letter-spacing: -0.04em;
   background: linear-gradient(180deg, #f9dada 0%, #d4caca 100%);
   -webkit-background-clip: text;
@@ -275,39 +269,134 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
-    padding: 20px 5px;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-      "Header"
-      "Content"
-      "Footer";
+    padding: 0 10px;
+    grid-template-rows: 1fr auto 1fr;
   }
+  
   .content {
-    gap: 32px;
-    /* Remove grid layout on mobile since now flex is used. */
-    /* grid-template-rows: auto auto auto; */
-    /* grid-template-areas:
-      "Header"
-      "Content"
-      "Footer"; */
+    max-width: 90vw;
+    gap: 36px;
   }
+  
   .title {
-    margin-bottom: 0;
-    font-size: clamp(32px, 12vw, 72px);
+    font-size: clamp(32px, 9vw, 100px);
   }
+  
   .description {
-    margin-bottom: 0;
-    padding: 0 20px;
-    font-size: clamp(16px, 5vw, 28px);
+    font-size: clamp(16px, 4vw, 32px);
+    padding: 0 10px;
   }
+  
   .explore-btn {
-    padding: 15px 30px;
+    padding: 16px 32px;
     gap: 10px;
   }
+  
   .arrow {
     width: 24px;
     height: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  html, body {
+    width: 100vw;
+    height: 100svh;
+    min-width: 100vw;
+    min-height: 100svh;
+  }
+  
+  body {
+    min-height: 100svh;
+    background: linear-gradient(165.32deg, #17152d 38.13%, #532bdc 101.5%);
+    background-attachment: fixed;
+  }
+  
+  #root,
+  .container {
+    width: 100vw;
+    min-width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+  }
+  
+  .container {
+    padding: 0 15px;
+    grid-template-rows: 1fr auto 1fr;
+    gap: 0;
+  }
+  
+  .container::before {
+    width: 100vw;
+    height: 100svh;
+  }
+  
+  .content {
+    gap: 24px;
+    max-width: 100%;
+    padding: 0 15px;
+  }
+  
+  .title {
+    font-size: clamp(28px, 11vw, 56px);
+    line-height: 1.15;
+    margin-bottom: 0;
+  }
+  
+  .description {
+    font-size: clamp(14px, 5vw, 20px);
+    padding: 0;
+    word-break: break-word;
+    margin-bottom: 0;
+  }
+  
+  .explore-btn {
+    padding: 14px 28px;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .explore-text {
+    font-size: clamp(16px, 4.5vw, 22px);
+  }
+  
+  .arrow {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 390px) {
+  .container {
+    padding: 15px 10px;
+  }
+  
+  .content {
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  .title {
+    font-size: clamp(24px, 10vw, 48px);
+  }
+  
+  .description {
+    font-size: clamp(12px, 4.5vw, 18px);
+  }
+  
+  .explore-btn {
+    padding: 12px 24px;
+    gap: 6px;
+  }
+  
+  .explore-text {
+    font-size: clamp(14px, 4vw, 18px);
+  }
+  
+  .arrow {
+    width: 16px;
+    height: 16px;
   }
 }
