@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 
-/* Reset & Base styles */
 * {
   margin: 0;
   padding: 0;
@@ -65,7 +64,6 @@ body {
   width: 100%;
 }
 
-/* Title Styles */
 .title {
   position: relative;
   font-weight: 700;
@@ -116,7 +114,6 @@ body {
   color: transparent;
 }
 
-/* Description Styles */
 .description {
   font-weight: 700;
   font-size: clamp(20px, 3vw, 48px);
@@ -130,7 +127,6 @@ body {
   color: #f9dada;
 }
 
-/* Gradient effect for highlighted description text */
 .description-gradient {
   position: relative;
   font-weight: 700;
@@ -153,11 +149,6 @@ body {
   animation: letterFlyIn 1s cubic-bezier(.54,.06,.39,1.19) forwards;
 }
 
-/* Animated delay for each letter */
-/* 
- * Removed invalid SCSS @for loop.
- * The required repeated CSS rules are written out explicitly below.
- */
 .description-gradient span:nth-child(1) { animation-delay: 0s; }
 .description-gradient span:nth-child(2) { animation-delay: 0.05s; }
 .description-gradient span:nth-child(3) { animation-delay: 0.10s; }
@@ -179,7 +170,6 @@ body {
 .description-gradient span:nth-child(19) { animation-delay: 0.90s; }
 .description-gradient span:nth-child(20) { animation-delay: 0.95s; }
 
-/* Letter animation keyframes */
 @keyframes letterFlyIn {
   0% {
     opacity: 0;
@@ -203,7 +193,6 @@ body {
   }
 }
 
-/* Fade/blur animation for letters */
 @keyframes fadeInLettersGlobal {
   from {
     opacity: 0;
@@ -219,7 +208,6 @@ body {
   }
 }
 
-/* Fallback if inline spans are missing */
 .description-gradient:not(:empty):not(:has(span)) {
   color: #fbeaed;
   text-shadow: 0 0 4px #f9dada88;
@@ -229,7 +217,6 @@ body {
   background-clip: initial;
 }
 
-/* Explore Button Styles */
 .explore-btn {
   display: inline-flex;
   align-items: center;
@@ -273,7 +260,6 @@ body {
   transform: rotate(90deg);
 }
 
-/* Fade in up animation */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -285,7 +271,6 @@ body {
   }
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .title {
     margin-bottom: 40px;
