@@ -1,6 +1,6 @@
 import "./Landing.css";
 
-const Landing = () => {
+export default function Landing() {
   return (
     <div className="container">
       <div className="content">
@@ -24,6 +24,4 @@ const Landing = () => {
       </div>
     </div>
   );
-};
-
-export default Landing;
+}
