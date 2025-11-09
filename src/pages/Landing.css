@@ -98,7 +98,7 @@ body {
 }
 
 .title::before {
-  background-image: url("/public/lucas-marcomini.jpg");
+  background-image: url("/lucas-marcomini.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 50%;
@@ -111,7 +111,7 @@ body {
 .title::after {
   background:
     linear-gradient(180deg, #8f4edd 70%, #532bdc 100%),
-    url("/public/lucas-marcomini.jpg");
+    url("/lucas-marcomini.jpg");
   background-size: cover;
   background-position: 50% 50%;
   background-repeat: no-repeat;
