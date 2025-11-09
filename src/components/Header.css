@@ -1,0 +1,36 @@
+.header {
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 99;
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+    transform: translateY(0px);
+    padding: 0 2rem;
+    grid-area: header;
+}
+
+.header > a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.header__logo {
+    height: 40px; width: 40px;
+    margin-right: 16px;
+    display: block;
+}
+
+.header__title {
+    font-family: 'Inter', 'system-ui', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgb(255, 255, 255);
+    display: block;
+    white-space: nowrap;
+}
