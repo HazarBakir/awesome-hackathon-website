@@ -12,6 +12,8 @@
     transform: translateY(0px);
     padding: 0 2rem;
     grid-area: header;
+    background: var(--header-background, rgba(22, 22, 28, 0.72));
+    color-scheme: light dark;
 }
 
 .header > a {
@@ -31,7 +33,25 @@
     font-size: 22px;
     font-weight: 700;
     letter-spacing: 1px;
-    color: rgb(255, 255, 255);
+    color: var(--header-title-color, rgb(255, 255, 255));
     display: block;
     white-space: nowrap;
+}
+
+@media (prefers-color-scheme: dark) {
+    .header {
+        background: var(--header-background-dark, rgba(18, 18, 21, 0.85));  
+    }
+    .header__title {
+        color: var(--header-title-color-dark, #fff);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .header {
+        background: var(--header-background-light, rgba(255, 255, 255, 0.85));
+    }
+    .header__title {
+        color: var(--header-title-color-light, #19191e);
+    }
 }

@@ -1,4 +1,4 @@
-import { formatTitle } from "@/utils/fortmatTitle";
+import { formatTitle } from "@/utils/formatTitle";
 import "./DocumentTOC.css";
 import type { TOCItem } from "@/lib/parser";
 
