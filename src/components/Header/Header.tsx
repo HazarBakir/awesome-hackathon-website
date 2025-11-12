@@ -10,14 +10,17 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <a href="/">
-        <img src="/papyr-logo.png" alt="Papyr Logo" className="header__logo" />
-        <span
-          className={`header__title${
-            isLandingPage ? " header__title--landing-white" : ""
-          }`}
-        >
-          Papyr.io
-        </span>
+        <>
+          <img className="header__logo" />
+          <span
+            className={
+              `header__title` +
+              (isLandingPage ? " header__title--landing-white" : "")
+            }
+          >
+            Papyr.io
+          </span>
+        </>
       </a>
     </header>
   );

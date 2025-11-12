@@ -21,6 +21,7 @@
   height: 40px;
   width: 40px;
   margin-right: 16px;
+  content: url('/papyr-logo-dark.png');
 }
 
 .header__title {
@@ -46,6 +47,9 @@
   .header__title--landing-white {
     color: #fff !important;
   }
+  .header__logo {
+    content: url('/papyr-logo-light.png');
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -57,5 +61,8 @@
   }
   .header__title--landing-white {
     color: #fff !important;
+  }
+  .header__logo {
+    content: url('/papyr-logo-dark.png');
   }
 }
