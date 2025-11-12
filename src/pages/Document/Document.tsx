@@ -6,6 +6,7 @@ import { parseTOC } from "@/lib/parser";
 import { DocumentContent } from "@/components/Document/DocumentContent";
 import { DocumentTOC } from "@/components/Document/DocumentTOC";
 import { useRepository } from "@/contexts/RepositoryContext";
+import { FaGithub } from "react-icons/fa";
 
 export default function Document() {
   const { repositoryInfo } = useRepository();
@@ -34,13 +35,25 @@ export default function Document() {
     fetchAndParse();
   }, [repositoryInfo]);
 
+  const githubRepoUrl = `https://github.com/${repositoryInfo.owner}/${repositoryInfo.repo}`;
+
   return (
     <div className="document-wrapper">
-      <div className="document-container" style={{ paddingTop: 64 }}>
+      <div className="document-container">
         <aside className="document-sidebar">
           <DocumentTOC toc={toc} />
         </aside>
         <main className="document-content">
+          <div>
+            <a
+              className="document-github-repo-link"
+              href={githubRepoUrl}
+              target="_blank"
+              title="GitHub Repository"
+            >
+              <FaGithub size={23} />
+            </a>
+          </div>
           <DocumentContent
             loading={loading}
             error={error}
