@@ -32,12 +32,19 @@
   white-space: nowrap;
 }
 
+.header__title--landing-white {
+  color: #fff !important;
+}
+
 @media (prefers-color-scheme: dark) {
   .header {
     background: none;
   }
   .header__title {
     color: var(--header-title-color-dark, #fff);
+  }
+  .header__title--landing-white {
+    color: #fff !important;
   }
 }
 
@@ -47,5 +54,8 @@
   }
   .header__title {
     color: var(--header-title-color-light, #19191e);
+  }
+  .header__title--landing-white {
+    color: #fff !important;
   }
 }
