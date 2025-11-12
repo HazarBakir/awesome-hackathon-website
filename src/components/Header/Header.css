@@ -1,57 +1,51 @@
 .header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    z-index: 99;
-    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
-    transform: translateY(0px);
-    padding: 0 2rem;
-    grid-area: header;
-    background: var(--header-background, rgba(22, 22, 28, 0.72));
-    color-scheme: light dark;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  z-index: 99;
+  background: none;
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+  grid-area: header;
 }
 
 .header > a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .header__logo {
-    height: 40px; width: 40px;
-    margin-right: 16px;
-    display: block;
+  height: 40px;
+  width: 40px;
+  margin-right: 16px;
 }
 
 .header__title {
-    font-family: 'Inter', 'system-ui', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--header-title-color, rgb(255, 255, 255));
-    display: block;
-    white-space: nowrap;
+  font-family: 'Inter', 'system-ui', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--header-title-color, #fff);
+  white-space: nowrap;
 }
 
 @media (prefers-color-scheme: dark) {
-    .header {
-        background: var(--header-background-dark, rgba(18, 18, 21, 0.85));  
-    }
-    .header__title {
-        color: var(--header-title-color-dark, #fff);
-    }
+  .header {
+    background: none;
+  }
+  .header__title {
+    color: var(--header-title-color-dark, #fff);
+  }
 }
 
 @media (prefers-color-scheme: light) {
-    .header {
-        background: var(--header-background-light, rgba(255, 255, 255, 0.85));
-    }
-    .header__title {
-        color: var(--header-title-color-light, #19191e);
-    }
+  .header {
+    background: none;
+  }
+  .header__title {
+    color: var(--header-title-color-light, #19191e);
+  }
 }
