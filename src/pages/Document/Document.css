@@ -106,10 +106,33 @@ body:has(.document-wrapper)::before {
   height: fit-content;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
-  transition: box-shadow 0.22s;
-  box-shadow: 0 6px 32px 0 rgba(61, 51, 109, 0.12),
-    0 1.5px 4px 0 rgba(83, 43, 220, 0.12);
   z-index: 10;
+  border-radius: 2.5rem;
+  background: rgba(245, 244, 252, 0.92);
+  box-shadow: 0 4px 36px 0 #a89deb18, 0 2px 4px 0 #cabaff13;
+  border: 1px solid rgba(83, 43, 220, 0.11);
+  transition: background 0.25s, box-shadow 0.23s, border 0.18s;
+}
+
+.document-sidebar:hover,
+.document-sidebar:focus-within {
+  border: 1.8px solid #cabaff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .document-sidebar {
+    background: rgba(48, 32, 80, 0.29);
+    border: 1.2px solid #3e31aa42;
+    box-shadow: 0 8px 36px 0 #2a265f22, 0 2px 12px 0 #4b2fda0c;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .document-sidebar {
+    background: rgba(245, 244, 252, 0.98);
+    border: 1.3px solid #cabaff38;
+    box-shadow: 0 8px 28px 0 #cabaff33, 0 2px 8px 0 #a89deb1a;
+  }
 }
 
 .document-markdown h1,
@@ -339,6 +362,7 @@ body:has(.document-wrapper)::before {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
   width: 52px;
   height: 52px;
   background: var(--github-link-bg);
