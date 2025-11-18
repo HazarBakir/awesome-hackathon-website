@@ -20,6 +20,8 @@ import { FetchReadme } from "@/lib/github";
 import { parseTOC } from "@/lib/parser";
 import { type TOCItem } from "@/types";
 
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+
 export default function Page() {
   const { repositoryInfo } = useRepository();
   const [markdown, setMarkdown] = useState<string>("");
@@ -168,6 +170,12 @@ export default function Page() {
 
   const breadcrumbPath = getBreadcrumbPath();
 
+  // Compute the GitHub repo URL from repositoryInfo
+  const githubUrl =
+    repositoryInfo.owner && repositoryInfo.repo
+      ? `https://github.com/${repositoryInfo.owner}/${repositoryInfo.repo}`
+      : null;
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -210,6 +218,19 @@ export default function Page() {
               ))}
             </BreadcrumbList>
           </Breadcrumb>
+          {githubUrl && (
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View this repository on GitHub"
+              className="ml-auto flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              title="View this repository on GitHub"
+            >
+              <GitHubLogoIcon width={24} height={24} />
+              <span className="sr-only">View this repository on GitHub</span>
+            </a>
+          )}
         </header>
         <div
           ref={contentRef}

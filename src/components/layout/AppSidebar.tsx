@@ -184,6 +184,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         setBranches(branchList);
       } catch (error) {
         setBranches([repositoryInfo.branch || "main"]);
+        console.log(error);
       }
     }
 
@@ -199,6 +200,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         const convertedNavItems = convertTOCToNavItems(tocItems);
         setNavItems(convertedNavItems);
       } catch (error) {
+        console.log(error);
         setNavItems([]);
       } finally {
         setIsLoading(false);
@@ -268,7 +270,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </CollapsibleContent>
               </SidebarGroup>
             </Collapsible>
-          ))  
+          ))
         )}
       </SidebarContent>
       <SidebarRail />
