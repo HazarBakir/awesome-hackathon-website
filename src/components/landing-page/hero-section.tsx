@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { HeroHeader } from "./header";
+import React from "react";
+import { DotsBackground } from "./background";
 
 const heroShowcaseContainerVariants = {
-  visible: {
-    transition: { staggerChildren: 0.05, delayChildren: 0.75 },
-  },
+  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.75 } },
 };
 
 const heroShowcaseItemVariants = {
@@ -15,7 +15,7 @@ const heroShowcaseItemVariants = {
     filter: "blur(12px)",
     y: 12,
   },
-  visible: {    
+  visible: {
     opacity: 1,
     filter: "blur(0px)",
     y: 0,
@@ -36,7 +36,8 @@ export default function HeroSection() {
   return (
     <>
       <HeroHeader forceActive />
-      <main className="overflow-hidden">
+      <main className="overflow-hidden relative">
+        <DotsBackground />
         <div
           aria-hidden
           className="absolute inset-0 isolate hidden contain-strict lg:block"
@@ -66,12 +67,13 @@ export default function HeroSection() {
                   as="p"
                   className="mt-8 max-w-2xl text-pretty text-lg"
                 >
-                  GitReads transforms ordinary GitHub documentation into an inviting,
-                  beautifully organized reading experience. Instantly dive into any repo’s README,
-                  enjoy seamless navigation across sections, and find what you need without the clutter.
-                  It’s documentation, but actually pleasant—and unmistakably yours to explore.
+                  GitReads transforms ordinary GitHub documentation into an
+                  inviting, beautifully organized reading experience. Instantly
+                  dive into any repositories' README, enjoy seamless navigation
+                  across sections, and find what you need without the clutter.
+                  It is documentation, but actually pleasant—and unmistakably
+                  yours to explore.
                 </TextEffect>
-
                 <AnimatedGroup
                   variants={{
                     container: heroShowcaseContainerVariants,
