@@ -2,6 +2,8 @@ import remarkEmoji from "remark-emoji";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useRepository } from "@/hooks/useRepository";
 import { generateHeadingId } from "@/utils/generateHeadingId";
 
@@ -231,29 +233,70 @@ export function DocumentMarkdown({ markdown }: { markdown: string }) {
               {children}
             </li>
           ),
-          code: ({ className, children, ...props }: any) => {
-            const isInline = !className;
-            return isInline ? (
-              <code
-                className="px-1 sm:px-1.5 py-0.5 rounded bg-muted text-xs sm:text-sm font-mono text-foreground wrap-break-words"
-                {...props}
-              >
-                {children}
-              </code>
-            ) : (
+          code: ({
+            className,
+            children,
+            ...props
+          }: React.ComponentProps<"code">) => {
+            const match = /language-(\w+)/.exec(className || "");
+            const language = match ? match[1] : "";
+            const isInline = !className || !language;
+
+            if (isInline) {
+              return (
+                <code
+                  className="px-1 sm:px-1.5 py-0.5 rounded bg-muted text-xs sm:text-sm font-mono text-foreground wrap-break-words"
+                  {...props}
+                >
+                  {children}
+                </code>
+              );
+            }
+
+            return (
               <code className={className} {...props}>
                 {children}
               </code>
             );
           },
-          pre: ({ children, ...props }) => (
-            <pre
-              className="mb-3 sm:mb-4 p-2 sm:p-4 rounded-lg bg-muted overflow-x-auto border border-border text-xs sm:text-sm"
-              {...props}
-            >
-              {children}
-            </pre>
-          ),
+          pre: ({ children, ...props }: React.ComponentProps<"pre">) => {
+            const codeElement = children as React.ReactElement<
+              React.ComponentProps<"code">
+            >;
+            const match = /language-(\w+)/.exec(
+              codeElement?.props?.className || ""
+            );
+            const language = match ? match[1] : "";
+
+            if (language && codeElement?.props?.children) {
+              return (
+                <div className="mb-3 sm:mb-4 rounded-lg border border-border overflow-hidden">
+                  <SyntaxHighlighter
+                    language={language}
+                    style={oneDark}
+                    PreTag="div"
+                    className="m-0! p-4! text-xs sm:text-sm"
+                    codeTagProps={{
+                      style: {
+                        background: "transparent",
+                      },
+                    }}
+                  >
+                    {String(codeElement.props.children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
+                </div>
+              );
+            }
+
+            return (
+              <pre
+                className="mb-3 sm:mb-4 p-2 sm:p-4 rounded-lg bg-muted overflow-x-auto border border-border text-xs sm:text-sm"
+                {...props}
+              >
+                {children}
+              </pre>
+            );
+          },
           blockquote: ({ children, ...props }) => (
             <blockquote
               className="mb-3 sm:mb-4 pl-3 sm:pl-4 border-l-4 border-primary/50 italic text-muted-foreground text-sm sm:text-base"

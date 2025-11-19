@@ -23,7 +23,7 @@ export default function HeroSection() {
           <div className="relative pt-24">
             <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"></div>
             <div className="mx-auto max-w-5xl px-6">
-              <div className="sm:mx-auto lg:mr-auto lg:mt-0">
+              <div className="sm:mx-auto lg:mr-auto lg:mt-0 flex flex-col gap-0 items-start">
                 <TextEffect
                   preset="fade-in-blur"
                   speedSegment={0.3}
@@ -40,12 +40,7 @@ export default function HeroSection() {
                   as="p"
                   className="mt-8 max-w-2xl text-pretty text-lg"
                 >
-                  GitReads transforms ordinary GitHub documentation into an
-                  inviting, beautifully organized reading experience. Instantly
-                  dive into any repositories' README, enjoy seamless navigation
-                  across sections, and find what you need without the clutter.
-                  It is documentation, but actually pleasant—and unmistakably
-                  yours to explore.
+                  GitReads transforms ordinary GitHub documentation into an inviting, beautifully organized reading experience. Instantly dive into any repositories' README, enjoy seamless navigation across sections, and find what you need without the clutter. It is documentation, but actually pleasant—and unmistakably yours to explore.
                 </TextEffect>
 
                 <div className="flex w-full max-w-xl items-center gap-2 mt-12">
