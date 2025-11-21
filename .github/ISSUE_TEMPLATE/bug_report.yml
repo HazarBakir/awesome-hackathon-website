@@ -1,0 +1,11 @@
+name: Bug Report
+description: Report a bug you encountered
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      placeholder: Describe the bug clearly.
+    validations:
+      required: true
