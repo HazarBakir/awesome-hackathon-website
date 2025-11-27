@@ -10,18 +10,6 @@
   <p align="center">
     Transform GitHub documentation into a beautifully organized reading experience
   </p>
-
-  <p align="center">
-    <a href="https://github.com/HazarBakir/git-reads/blob/main/LICENSE">
-      <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" />
-    </a>
-    <a href="https://github.com/HazarBakir/git-reads/stargazers">
-      <img src="https://img.shields.io/github/stars/HazarBakir/git-reads" alt="Stars" />
-    </a>
-    <a href="https://github.com/HazarBakir/git-reads/network/members">
-      <img src="https://img.shields.io/github/forks/HazarBakir/git-reads" alt="Forks" />
-    </a>
-  </p>
 </div>
 
 ---
