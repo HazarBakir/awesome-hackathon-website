@@ -7,7 +7,7 @@ import {
   isValidGitHubIdentifier,
   isValidUrl,
   sanitizeDataUri,
-} from "@/utils/markdownSecurity";
+} from "./security";
 import type { RepositoryInfo } from "@/types";
 
 type ComponentsProps = {

@@ -1,34 +1,21 @@
-import type { ReadmeSection, TOCItem } from "@/types/parser";
-import { generateHeadingId } from "@/utils/generateHeadingId";
+import type { ReadmeSection, TOCItem } from "@/types";
+import { generateHeadingId } from "@/utils";
 
-export function parseReadmeSections(readmeResponseData: {
-  content?: string;
-  encoding?: string;
-}): ReadmeSection[] {
-  if (!readmeResponseData || !readmeResponseData.content) {
+const HEADING_REGEX = /^(#{1,6})\s+(.+)$/;
+
+export function parseReadmeSections(markdown: string): ReadmeSection[] {
+  if (!markdown) {
     return [];
   }
 
-  let decodedContent = "";
-  try {
-    if (readmeResponseData.encoding === "base64") {
-      decodedContent = atob(readmeResponseData.content.replace(/\n/g, ""));
-    } else {
-      decodedContent = readmeResponseData.content;
-    }
-  } catch (error) {
-    console.error("Error decoding README content:", error);
-    return [];
-  }
-
-  const lines = decodedContent.split(/\r?\n/);
-
+  const lines = markdown.split(/\r?\n/);
   const sections: ReadmeSection[] = [];
   let currentHeading = "";
   let currentDescriptionLines: string[] = [];
 
   for (const line of lines) {
-    const headingMatch = /^#{1,6}\s+(.*)/.exec(line);
+    const headingMatch = HEADING_REGEX.exec(line);
+
     if (headingMatch) {
       if (currentHeading || currentDescriptionLines.length > 0) {
         sections.push({
@@ -36,12 +23,13 @@ export function parseReadmeSections(readmeResponseData: {
           description: currentDescriptionLines.join("\n").trim(),
         });
       }
-      currentHeading = headingMatch[1].trim();
+      currentHeading = headingMatch[2].trim();
       currentDescriptionLines = [];
     } else {
       currentDescriptionLines.push(line);
     }
   }
+
   if (
     currentHeading ||
     currentDescriptionLines.some((line) => line.trim() !== "")
@@ -67,9 +55,7 @@ export function parseTOC(markdown: string): TOCItem[] {
   let inCodeBlock = false;
   let codeBlockFence = "";
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
+  for (const line of lines) {
     const fenceMatch = line.match(/^(\s*)(`{3,}|~{3,})(.*)$/);
     if (fenceMatch) {
       if (inCodeBlock && fenceMatch[2] === codeBlockFence) {
@@ -86,11 +72,10 @@ export function parseTOC(markdown: string): TOCItem[] {
       continue;
     }
 
-    const headingMatch = /^(#{1,6})\s+(.+)$/.exec(line);
+    const headingMatch = HEADING_REGEX.exec(line);
     if (headingMatch) {
       const level = headingMatch[1].length;
       const text = headingMatch[2].trim();
-
       const id = generateHeadingId(text);
 
       toc.push({ level, text, id });

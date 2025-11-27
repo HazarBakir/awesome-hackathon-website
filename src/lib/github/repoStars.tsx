@@ -1,39 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { Star } from "lucide-react";
-
-async function fetchRepoStars(
-  owner: string,
-  repo: string
-): Promise<number | null> {
-  try {
-    const response = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}`,
-      {
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-          "User-Agent": "repo-stars-fetcher",
-        },
-      }
-    );
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.warn(
-        "GitHub API Error:",
-        response.status,
-        response.statusText,
-        errorData.message || ""
-      );
-      return null;
-    }
-    const data = await response.json();
-    return typeof data.stargazers_count === "number"
-      ? data.stargazers_count
-      : null;
-  } catch (error) {
-    console.error("Error fetching GitHub stars:", error);
-    return null;
-  }
-}
+import { fetchRepoStars } from "./api";
 
 interface RepoStarsProps {
   owner?: string;
@@ -71,10 +38,12 @@ export function RepoStars({ owner, repo }: RepoStarsProps) {
 
   useEffect(() => {
     let cancelled = false;
+
     if (!owner || !repo) {
       dispatch({ type: "RESET" });
       return;
     }
+
     dispatch({ type: "LOADING" });
 
     fetchRepoStars(owner, repo).then((stars) => {

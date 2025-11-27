@@ -1,4 +1,4 @@
-import { sanitizePath, isValidGitHubIdentifier } from "./markdownSecurity";
+import { sanitizePath, isValidGitHubIdentifier } from "./security";
 import type { RepositoryInfo } from "@/types";
 
 export function patchImages(
