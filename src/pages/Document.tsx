@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef, Fragment } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { AppSidebar } from "@/components/layout/AppSidebar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   SidebarInset,
   SidebarProvider,
@@ -25,7 +31,6 @@ import { parseTOC } from "@/lib/markdown";
 import {
   createSession,
   getSession,
-  updateSessionAccess,
   deleteSession,
   getSessionTimeRemaining,
 } from "@/lib/session";
@@ -50,10 +55,15 @@ function ReadmeSkeleton() {
   );
 }
 
-function formatTimeRemaining(ms: number): string {
-  const minutes = Math.floor(ms / 60000);
-  const seconds = Math.floor((ms % 60000) / 1000);
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+function formatExpireDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
 }
 
 export default function Document() {
@@ -68,11 +78,10 @@ export default function Document() {
   const [showModal, setShowModal] = useState(false);
   const [repo404, setRepo404] = useState(false);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState<number>(0);
+  const [expiresAt, setExpiresAt] = useState<Date | null>(null);
 
   const contentRef = useRef<HTMLDivElement>(null);
-  const activityTimerRef = useRef<number | null>(null);
-  const countdownTimerRef = useRef<number | null>(null);
+  const expireCheckTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -83,6 +92,7 @@ export default function Document() {
         if (session) {
           setRepositoryInfo(session.repositoryInfo);
           setCurrentSessionId(sessionId);
+          setExpiresAt(session.expiresAt);
         } else {
           setError(
             "Session expired or invalid. Please enter a new repository URL."
@@ -101,82 +111,33 @@ export default function Document() {
   }, [sessionId, navigate, setRepositoryInfo]);
 
   useEffect(() => {
-    if (!currentSessionId) return;
+    if (!currentSessionId || !expiresAt) return;
 
     let cancelled = false;
 
-    const updateCountdown = async () => {
+    const checkExpiration = async () => {
       const remaining = await getSessionTimeRemaining(currentSessionId);
       if (cancelled) return;
-      setTimeRemaining(remaining);
 
       if (remaining <= 0) {
         setError("Session expired. Please enter a new repository URL.");
         setShowModal(true);
         setCurrentSessionId(null);
+        setExpiresAt(null);
         navigate("/document", { replace: true });
       }
     };
 
-    updateCountdown();
-    countdownTimerRef.current = window.setInterval(updateCountdown, 1000);
+    checkExpiration();
+    expireCheckTimerRef.current = window.setInterval(checkExpiration, 60000);
 
     return () => {
       cancelled = true;
-      if (countdownTimerRef.current) {
-        clearInterval(countdownTimerRef.current);
+      if (expireCheckTimerRef.current) {
+        clearInterval(expireCheckTimerRef.current);
       }
     };
-  }, [currentSessionId, navigate]);
-
-  useEffect(() => {
-    if (!currentSessionId) return;
-
-    let cancelled = false;
-
-    const updateActivity = async () => {
-      if (!currentSessionId) return;
-      const success = await updateSessionAccess(currentSessionId);
-      if (cancelled) return;
-      if (!success) {
-        setError("Session expired. Please enter a new repository URL.");
-        setShowModal(true);
-        setCurrentSessionId(null);
-        navigate("/document", { replace: true });
-      }
-    };
-
-    const handleActivity = () => {
-      updateActivity();
-
-      if (activityTimerRef.current) {
-        clearTimeout(activityTimerRef.current);
-      }
-
-      activityTimerRef.current = window.setTimeout(() => {
-        updateActivity();
-      }, 30000);
-    };
-
-    window.addEventListener("mousemove", handleActivity);
-    window.addEventListener("keydown", handleActivity);
-    window.addEventListener("scroll", handleActivity);
-    window.addEventListener("click", handleActivity);
-
-    handleActivity();
-
-    return () => {
-      cancelled = true;
-      window.removeEventListener("mousemove", handleActivity);
-      window.removeEventListener("keydown", handleActivity);
-      window.removeEventListener("scroll", handleActivity);
-      window.removeEventListener("click", handleActivity);
-
-      if (activityTimerRef.current) {
-        clearTimeout(activityTimerRef.current);
-      }
-    };
-  }, [currentSessionId, navigate]);
+  }, [currentSessionId, expiresAt, navigate]);
 
   useEffect(() => {
     if (!repositoryInfo?.owner || !repositoryInfo?.repo || showModal) {
@@ -364,6 +325,11 @@ export default function Document() {
       return;
     }
 
+    const session = await getSession(newSessionId);
+    if (session) {
+      setExpiresAt(session.expiresAt);
+    }
+
     setCurrentSessionId(newSessionId);
     navigate(`/document/${newSessionId}`, { replace: true });
     setRepositoryInfo(newRepositoryInfo);
@@ -420,17 +386,31 @@ export default function Document() {
               ))}
             </BreadcrumbList>
           </Breadcrumb>
-          {currentSessionId && timeRemaining > 0 && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Expires in:</span>
-              <span
-                className={`font-mono ${
-                  timeRemaining < 60000 ? "text-destructive" : ""
-                }`}
+          {currentSessionId && expiresAt && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="flex items-center justify-center rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  aria-label="Session expiration information"
+                >
+                  <InfoCircledIcon width={18} height={18} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="bottom"
+                align="end"
+                className="max-w-xs"
+                style={{ right: 0 }}
               >
-                {formatTimeRemaining(timeRemaining)}
-              </span>
-            </div>
+                <div className="space-y-1 flex flex-col items-center text-center">
+                  <p className="font-semibold w-full text-center">Session Expires</p>
+                  <p className="text-xs opacity-90 w-full text-center">
+                    {formatExpireDate(expiresAt)}
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
           )}
           {githubUrl && repositoryInfo?.owner && repositoryInfo?.repo && (
             <a
