@@ -1,7 +1,7 @@
 import { supabase, type Session } from '@/lib/supabase';
 import type { RepositoryInfo } from '@/types';
 
-const SESSION_DURATION = 30 * 60 * 1000;
+const SESSION_DURATION = 24 * 60 * 60 * 1000;
 
 export interface SessionData {
   id: string;
@@ -89,31 +89,8 @@ export async function getSession(
 }
 
 export async function updateSessionAccess(
-  sessionId: string
 ): Promise<boolean> {
-  try {
-    const now = new Date();
-    const expiresAt = new Date(now.getTime() + SESSION_DURATION);
-
-    const { error } = await supabase
-      .from('sessions')
-      .update({
-        last_accessed_at: now.toISOString(),
-        expires_at: expiresAt.toISOString(),
-      })
-      .eq('id', sessionId)
-      .eq('is_active', true);
-
-    if (error) {
-      console.error('Error updating session:', error);
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error('Exception updating session:', error);
-    return false;
-  }
+  return false;
 }
 
 export async function deleteSession(sessionId: string): Promise<boolean> {
