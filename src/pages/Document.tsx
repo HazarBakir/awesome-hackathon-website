@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { AppSidebar } from "@/components/layout/AppSidebar";
+import { TextSelectionPopup } from "@/components/document/TextSelectionPopup";
+import { useHighlights } from "@/hooks/useHighlights";
 import {
   Popover,
   PopoverContent,
@@ -82,6 +84,11 @@ export default function Document() {
 
   const contentRef = useRef<HTMLDivElement>(null);
   const expireCheckTimerRef = useRef<number | null>(null);
+
+  const { handleHighlight, reloadHighlights } = useHighlights(
+    currentSessionId,
+    contentRef
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -165,6 +172,10 @@ export default function Document() {
         setMarkdown(content);
         const parsedTOC = parseTOC(content);
         setTocItems(parsedTOC);
+
+        setTimeout(() => {
+          reloadHighlights();
+        }, 100);
       } catch (err) {
         let errorMessage =
           err instanceof Error ? err.message : "Failed to load README content";
@@ -189,7 +200,7 @@ export default function Document() {
     return () => {
       cancelled = true;
     };
-  }, [repositoryInfo, showModal, setRepositoryInfo]);
+  }, [repositoryInfo, showModal, setRepositoryInfo, reloadHighlights]);
 
   useEffect(() => {
     if (!markdown || isLoading) return;
@@ -342,6 +353,7 @@ export default function Document() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
+        <TextSelectionPopup onHighlight={handleHighlight} />
         <RepositoryInputModal
           open={showModal}
           onOpenChange={setShowModal}
@@ -404,7 +416,9 @@ export default function Document() {
                 style={{ right: 0 }}
               >
                 <div className="space-y-1 flex flex-col items-center text-center">
-                  <p className="font-semibold w-full text-center">Session Expires</p>
+                  <p className="font-semibold w-full text-center">
+                    Session Expires
+                  </p>
                   <p className="text-xs opacity-90 w-full text-center">
                     {formatExpireDate(expiresAt)}
                   </p>
@@ -433,10 +447,7 @@ export default function Document() {
             </a>
           )}
         </header>
-        <div
-          ref={contentRef}
-          className="flex flex-1 flex-col gap-4 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12"
-        >
+        <div className="flex flex-1 flex-col gap-4 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12">
           {showModal ? (
             <div className="flex items-center justify-center h-full min-h-[200px]">
               <div className="text-muted-foreground text-sm sm:text-base px-4 text-center">
@@ -458,7 +469,9 @@ export default function Document() {
               </div>
             )
           ) : (
-            <DocumentMarkdown markdown={markdown} />
+            <div ref={contentRef}>
+              <DocumentMarkdown markdown={markdown} />
+            </div>
           )}
         </div>
       </SidebarInset>
